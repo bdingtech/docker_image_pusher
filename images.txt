@@ -7,3 +7,4 @@
 
 #--platform=linux/amd64 bdingtech/seamoon
 --platform=linux/amd64 dvkunion/seamoon:latest
+--platform=linux/amd64 whyour/qinglong:latest
