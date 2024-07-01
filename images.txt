@@ -9,4 +9,5 @@
 #--platform=linux/amd64 dvkunion/seamoon:latest
 #--platform=linux/amd64 whyour/qinglong:latest
 #--platform=linux/amd64 lobehub/lobe-chat:latest
---platform=linux/amd64 jc21/nginx-proxy-manager:latest
+#--platform=linux/amd64 jc21/nginx-proxy-manager:latest
+--platform=linux/amd64 justsong/one-api
