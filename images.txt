@@ -10,5 +10,5 @@
 #--platform=linux/amd64 whyour/qinglong:latest
 #--platform=linux/amd64 lobehub/lobe-chat:latest
 #--platform=linux/amd64 jc21/nginx-proxy-manager:latest
---platform=linux/amd64 justsong/one-api -r registry.ap-southeast-1.aliyuncs.com
---platform=linux/amd64 yidadaa/chatgpt-next-web
+#--platform=linux/amd64 justsong/one-api -r registry.ap-southeast-1.aliyuncs.com
+--platform=linux/amd64 yidadaa/chatgpt-next-web registry.cn-shanghai.aliyuncs.com
