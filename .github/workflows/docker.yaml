@@ -55,7 +55,6 @@ jobs:
     - name: Build and push image Aliyun
       run: |
         set -e  # 发生错误时退出
-        docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $DEFAULT_ALIYUN_REGISTRY
         
         # 数据预处理, 判断镜像是否重名
         declare -A duplicate_images
@@ -94,6 +93,9 @@ jobs:
             image=$(echo "$line" | awk '{for (i=1; i<NF; i++) if ($i == "-r") break; print $(i-1)}')
             echo "docker pull $image"
             docker pull $image
+
+            # 登录到指定的注册表
+            docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $registry
 
             image_name_tag=$(echo "$image" | awk -F'/' '{print $NF}')
             name_space=$(echo "$image" | awk -F'/' '{if (NF==3) print $2; else if (NF==2) print $1; else print ""}')
