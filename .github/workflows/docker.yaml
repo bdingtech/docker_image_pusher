@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  ALIYUN_REGISTRY: "${{ secrets.ALIYUN_REGISTRY }}"
+  DEFAULT_ALIYUN_REGISTRY: "${{ secrets.ALIYUN_REGISTRY }}"
   ALIYUN_NAME_SPACE: "${{ secrets.ALIYUN_NAME_SPACE }}"
   ALIYUN_REGISTRY_USER: "${{ secrets.ALIYUN_REGISTRY_USER }}"
   ALIYUN_REGISTRY_PASSWORD: "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}"
@@ -55,7 +55,7 @@ jobs:
     - name: Build and push image Aliyun
       run: |
         set -e  # 发生错误时退出
-        docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
+        docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $DEFAULT_ALIYUN_REGISTRY
         
         # 数据预处理, 判断镜像是否重名
         declare -A duplicate_images
@@ -84,17 +84,17 @@ jobs:
             [[ -z "$line" ]] && continue
             [[ "$line" =~ ^\s*# ]] && continue
 
-            echo "docker pull $line"
-            docker pull $line
-
             platform=$(echo "$line" | awk -F'--platform[ =]' '{if (NF>1) print $2}' | awk '{print $1}')
-            registry=$(echo "$line" | awk '{print $(NF-1)}')
-            registry=${registry:-$ALIYUN_REGISTRY}
+            registry=$(echo "$line" | grep -oP '(?<=-r )[^ ]+' || echo "$DEFAULT_ALIYUN_REGISTRY")
             echo "Using registry: $registry"
 
             platform_prefix="${platform//\//_}_"
 
-            image=$(echo "$line" | awk '{print $NF}')
+            # 提取镜像名称，忽略最后的注册表参数
+            image=$(echo "$line" | awk '{for (i=1; i<NF; i++) if ($i == "-r") break; print $(i-1)}')
+            echo "docker pull $image"
+            docker pull $image
+
             image_name_tag=$(echo "$image" | awk -F'/' '{print $NF}')
             name_space=$(echo "$image" | awk -F'/' '{if (NF==3) print $2; else if (NF==2) print $1; else print ""}')
             image_name=$(echo "$image_name_tag" | awk -F':' '{print $1}')
@@ -120,5 +120,5 @@ jobs:
             echo "磁盘空间清理完毕"
             echo "=============================================================================="
             df -hT
-            echo "==============================================================================
+            echo "=============================================================================="
         done < images.txt
