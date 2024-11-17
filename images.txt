@@ -13,4 +13,6 @@
 #--platform=linux/amd64 justsong/one-api -r registry.ap-southeast-1.aliyuncs.com
 #--platform=linux/amd64 yidadaa/chatgpt-next-web -r registry.cn-shanghai.aliyuncs.com
 #--platform=linux/amd64 justsong/one-api -r registry.cn-shanghai.aliyuncs.com
---platform=linux/amd64 gitlab/gitlab-ce -r registry.cn-hangzhou.aliyuncs.com
+#--platform=linux/amd64 gitlab/gitlab-ce -r registry.cn-hangzhou.aliyuncs.com
+--platform=linux/amd64 nginx
+
